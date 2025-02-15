@@ -28,13 +28,13 @@ import ForgetPass from "./Components/ForgetPassword/ForgetPassword.jsx";
 import ResetCode from "./Components/ResetCode/ResetCode.jsx";
 import ResetPassword from "./Components/ResetPassword/ResetPassword.jsx";
 import Profile from "./Components/Profile/Profile.jsx";
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 
 const query = new QueryClient();
 
 // ✅ استخدمي createBrowserRouter
 
-let routers = createBrowserRouter([
+let routers = createHashRouter([
   {
     path: "/",
     element: <Layout />,
