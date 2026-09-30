@@ -25,7 +25,15 @@ export default function Navbar() {
       navigate("/login");
     }
   }
-  
+
+  // دالة للتحقق من وجود توكن قبل الدخول على cart أو wishlist
+  function handleCartOrWishlist() {
+    if (!userToken) {
+      navigate("/login");
+    } else {
+      playClickSound();
+    }
+  }
 
   function handleNavLinkClick() {
     setIsOpen(false);
@@ -50,50 +58,48 @@ export default function Navbar() {
         </div>
 
         {/* Navbar Links - Desktop */}
-        {userToken && (
-          <div className="hidden lg:flex lg:gap-x-4 capitalize font-medium">
-            {["home", "brands", "categories", "products"].map((item) => (
-              <NavLink key={item} to={item} className="text-gray-900 hover:text-blue-900 transition duration-200" onClick={playClickSound}>
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-              </NavLink>
-            ))}
-          </div>
-        )}
+        <div className="hidden lg:flex lg:gap-x-4 capitalize font-medium">
+          {["home", "brands", "categories", "products"].map((item) => (
+            <NavLink key={item} to={item} className="text-gray-900 hover:text-blue-900 transition duration-200" onClick={playClickSound}>
+              {item.charAt(0).toUpperCase() + item.slice(1)}
+            </NavLink>
+          ))}
+        </div>
 
         {/* Navbar Icons - Desktop */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-6 items-center">
+          <NavLink to="cart" className="relative text-blue-900" onClick={handleCartOrWishlist}>
+            <i className="fas fa-cart-shopping fa-2xl"></i>
+            {cart && cart.numOfCartItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                {cart.numOfCartItems}
+              </span>
+            )}
+          </NavLink>
+
+          <NavLink to="wishlist" className="text-blue-900" onClick={handleCartOrWishlist}>
+            <i className="fas fa-heart fa-2xl"></i>
+          </NavLink>
+
           {userToken ? (
-            <div className="flex items-center gap-6">
-              <NavLink to="cart" className="relative text-blue-900" onClick={playClickSound}>
-                <i className="fas fa-cart-shopping fa-2xl"></i>
-                {cart && cart.numOfCartItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                    {cart.numOfCartItems}
-                  </span>
-                )}
-              </NavLink>
-
-              <NavLink to="wishlist" className="text-blue-900" onClick={playClickSound}>
-                <i className="fas fa-heart fa-2xl"></i>
-              </NavLink>
-
+            <>
               <NavLink to="profile" className="text-blue-900" onClick={playClickSound}>
                 <i className="fas fa-user fa-2xl"></i>
               </NavLink>
 
               <button onClick={() => { logOut(); playClickSound(); }} className="bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition duration-200">
-              <i className="fas fa-sign-out-alt mr-2"></i>
+                <i className="fas fa-sign-out-alt mr-2"></i>
                 Log Out
               </button>
-            </div>
+            </>
           ) : (
             <div className="flex items-center gap-6">
               <NavLink to="/login" className="text-blue-900 font-semibold py-2 px-4 rounded-md hover:text-blue-700 transition duration-200" onClick={playClickSound}>
-              <i className="fas fa-sign-in-alt mr-2"></i> 
+                <i className="fas fa-sign-in-alt mr-2"></i> 
                 Login
               </NavLink>
               <NavLink to="/register" className="bg-blue-900 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-800 hover:text-white transition duration-200" onClick={playClickSound}>
-              <i className="fas fa-user-plus mr-2"></i> 
+                <i className="fas fa-user-plus mr-2"></i> 
                 Register
               </NavLink>
             </div>
@@ -110,7 +116,6 @@ export default function Navbar() {
              <i className="fas fa-times fa-lg"></i>
             </button>
 
-
             {userToken ? (
               <>
                 {["home", "brands", "categories", "products","cart", "wishlist", "profile"].map((item) => (
@@ -120,23 +125,21 @@ export default function Navbar() {
                 ))}
 
                 <button onClick={() => { logOut(); handleNavLinkClick(); }} className="bg-red-600 text-white py-3 px-6 rounded-lg mt-4 font-semibold text-lg shadow-md hover:bg-red-700 transition duration-200">
-                <i className="fas fa-sign-out-alt mr-2"></i> 
-                Log Out
+                  <i className="fas fa-sign-out-alt mr-2"></i> 
+                  Log Out
                 </button>
-
               </>
             ) : (
               <>
                 <NavLink to="/login" className="text-blue-900 font-semibold py-2 px-4 rounded-md hover:text-blue-700 transition duration-200" onClick={handleNavLinkClick}> 
-                <i className="fas fa-sign-in-alt mr-2"></i> 
-                Login
+                  <i className="fas fa-sign-in-alt mr-2"></i> 
+                  Login
                 </NavLink>
 
                 <NavLink to="/register" className="bg-blue-900 text-white font-semibold py-2 px-4 rounded-md mt-4 hover:bg-blue-800 hover:text-white transition duration-200 flex items-center justify-center" onClick={handleNavLinkClick}>
-                <i className="fas fa-user-plus mr-2"></i> 
-                Register
+                  <i className="fas fa-user-plus mr-2"></i> 
+                  Register
                 </NavLink>
-
               </>
             )}
           </div>

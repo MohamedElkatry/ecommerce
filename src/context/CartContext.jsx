@@ -1,23 +1,18 @@
-import { createContext, useState, useEffect } from "react";
-import axios from "axios";
+import { createContext, useState, useEffect, useContext } from "react";
+import api, { authHeaders } from "../services/api";
 import toast from "react-hot-toast";
+import { UserContext } from "./UserContext";
 
 export const CartContext = createContext();
 
 export default function CartContextProvider({ children }) {
   const [cart, setCart] = useState(null);
+  const { userToken } = useContext(UserContext);
 
   // Function to fetch the cart
   async function getProductToCart() {
     try {
-      const { data } = await axios.get(
-        "https://ecommerce.routemisr.com/api/v1/cart",
-        {
-          headers: {
-            token: localStorage.getItem("userToken"),
-          },
-        }
-      );
+      const { data } = await api.get("/cart", authHeaders());
       setCart(data); // Update the cart state
     } catch (err) {
       console.log(err);
@@ -27,15 +22,7 @@ export default function CartContextProvider({ children }) {
   // Add product to cart
   async function addProductToCart(productId) {
     try {
-      await axios.post(
-        "https://ecommerce.routemisr.com/api/v1/cart",
-        { productId },
-        {
-          headers: {
-            token: localStorage.getItem("userToken"),
-          },
-        }
-      );
+      await offlinePost();
       await getProductToCart(); // Refresh cart after adding
       toast.success("Product added to cart successfully");
     } catch (err) {
@@ -47,15 +34,7 @@ export default function CartContextProvider({ children }) {
   // Update product count in the cart
   async function updateProductCountToCart(productId, count) {
     try {
-      await axios.put(
-        `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
-        { count },
-        {
-          headers: {
-            token: localStorage.getItem("userToken"),
-          },
-        }
-      );
+      await api.put(`/cart/${productId}`, { count }, authHeaders());
       await getProductToCart(); // Refresh cart after updating
       toast.success("Product count updated successfully");
     } catch (err) {
@@ -67,14 +46,7 @@ export default function CartContextProvider({ children }) {
   // Remove product from cart
   async function deleteProductCart(productId) {
     try {
-      await axios.delete(
-        `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
-        {
-          headers: {
-            token: localStorage.getItem("userToken"),
-          },
-        }
-      );
+      await api.delete(`/cart/${productId}`, authHeaders());
       await getProductToCart(); // Refresh cart after deleting
       toast.success("Product removed from cart successfully");
     } catch (err) {
@@ -90,13 +62,12 @@ export default function CartContextProvider({ children }) {
 
   // Listen for user token changes and fetch the new cart
   useEffect(() => {
-    const token = localStorage.getItem("userToken");
-    if (token) {
-      getProductToCart(); // Fetch cart for the logged-in user
+    if (userToken) {
+      getProductToCart();
     } else {
-      clearCart(); // Clear cart if no user is logged in
+      clearCart();
     }
-  }, [localStorage.getItem("userToken")]); // Trigger when the token changes
+  }, [userToken]);
 
   return (
     <CartContext.Provider

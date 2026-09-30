@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api, { authHeaders } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -35,9 +35,7 @@ export default function AllOrders() {
     try {
       const decodedToken = jwtDecode(token);
       const { id } = decodedToken;
-      const { data } = await axios.get(
-        `https://ecommerce.routemisr.com/api/v1/orders/user/${id}`
-      );
+      const { data } = await api.get(`/orders/user/${id}`, authHeaders());
       const sortedOrders = [...data].sort((a, b) =>
         sortOrder === "desc"
           ? new Date(b.createdAt) - new Date(a.createdAt)

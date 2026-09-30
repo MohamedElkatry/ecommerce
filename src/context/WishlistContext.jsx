@@ -1,25 +1,20 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { createContext, useState, useEffect } from "react";
-import axios from "axios";
+import { createContext, useState, useEffect, useContext } from "react";
+import api, { authHeaders } from "../services/api";
 import toast from "react-hot-toast";
+import { UserContext } from "./UserContext";
 
 export const WishlistContext = createContext();
 
 export default function WishlistContextProvider({ children }) {
   const [wishlist, setWishlist] = useState([]);
+  const { userToken } = useContext(UserContext);
 
   // Fetch wishlist
   async function getWishlist() {
     try {
-      const { data } = await axios.get(
-        "https://ecommerce.routemisr.com/api/v1/wishlist",
-        {
-          headers: {
-            token: localStorage.getItem("userToken"),
-          },
-        }
-      );
+      const { data } = await api.get("/wishlist", authHeaders());
       console.log("Wishlist fetched:", data?.data);
       setWishlist(data?.data || []);
     } catch (err) {
@@ -29,17 +24,10 @@ export default function WishlistContextProvider({ children }) {
   }
 
   // Add product to wishlist
-  async function addToWishlist(productId) {
+  async function addToWishlist(productOrId) {
+    const productId = typeof productOrId === "object" && productOrId !== null ? productOrId.id : productOrId;
     try {
-      const { data } = await axios.post(
-        "https://ecommerce.routemisr.com/api/v1/wishlist",
-        { productId },
-        {
-          headers: {
-            token: localStorage.getItem("userToken"),
-          },
-        }
-      );
+      const { data } = await api.post("/wishlist", { productId }, authHeaders());
       console.log("Product added to wishlist:", data);
       toast.success("Product added to wishlist ❤️");
 
@@ -53,14 +41,7 @@ export default function WishlistContextProvider({ children }) {
   // Remove product from wishlist
   async function removeFromWishlist(productId) {
     try {
-      const { data } = await axios.delete(
-        `https://ecommerce.routemisr.com/api/v1/wishlist/${productId}`,
-        {
-          headers: {
-            token: localStorage.getItem("userToken"),
-          },
-        }
-      );
+      const { data } = await api.delete(`/wishlist/${productId}`, authHeaders());
       console.log("Product removed from wishlist:", data);
       toast.success("Product removed from wishlist 💔");
 
@@ -72,10 +53,12 @@ export default function WishlistContextProvider({ children }) {
   }
 
   useEffect(() => {
-    if (localStorage.getItem("userToken")) {
-      getWishlist(); // Fetch wishlist on page load
+    if (userToken) {
+      getWishlist();
+    } else {
+      setWishlist([]);
     }
-  }, []);
+  }, [userToken]);
 
   return (
     <WishlistContext.Provider

@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import { WishlistContext } from "../../context/WishlistContext";
 import { CartContext } from "../../Context/CartContext";
 import Loading from "../Loading/Loading";
@@ -23,10 +23,10 @@ export default function BrandDetails() {
   useEffect(() => {
     async function fetchBrandDetails() {
       try {
-        const brandResponse = await axios.get(`https://ecommerce.routemisr.com/api/v1/brands/${id}`);
+        const brandResponse = await api.get(`/brands/${id}`);
         setBrand(brandResponse.data.data);
 
-        const productResponse = await axios.get(`https://ecommerce.routemisr.com/api/v1/products?brand=${id}`);
+        const productResponse = await api.get(`/products?brand=${id}`);
         setProducts(productResponse.data.data);
       } catch (error) {
         console.error("Error fetching brand or products:", error);

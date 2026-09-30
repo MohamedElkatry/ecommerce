@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
-import axios from "axios";
+import api from "../../services/api";
 
 export default function CategorySlider() {
   const [categories, setCategories] = useState([]);
@@ -25,7 +25,7 @@ export default function CategorySlider() {
 
   async function getCategories() {
     try {
-      let { data } = await axios.get("https://ecommerce.routemisr.com/api/v1/categories");
+      let { data } = await api.get("/categories");
       setCategories(data.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -46,6 +46,8 @@ export default function CategorySlider() {
         <div className="flex justify-center items-center min-h-[200px]">
           <p className="text-lg text-gray-700">Loading categories...</p>
         </div>
+      ) : categories.length === 0 ? (
+        <p className="text-center text-gray-600">No categories to show.</p>
       ) : (
         <Slider {...settings}>
           {categories.map((category, index) => (

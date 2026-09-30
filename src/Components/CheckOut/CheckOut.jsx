@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import React, { useState, useContext } from "react";
 import { useFormik } from "formik";
-import axios from "axios";
+import api, { authHeaders } from "../../services/api";
 import toast from "react-hot-toast";
 import { CartContext } from "../../Context/CartContext";
 import { FaCity, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
@@ -27,10 +27,10 @@ export default function CheckOut() {
         details: values.details,
       };
 
-      let { data } = await axios.post(
-        `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cart.cartId}?url=http://localhost:5173`,
-        { shippingAddress: shippingData }, // تأكدنا إنه بيبعت بيانات الشحن
-        { headers: { token } }
+      let { data } = await api.post(
+        `/orders/checkout-session/${cart.cartId}?url=${encodeURIComponent(window.location.origin)}`,
+        { shippingAddress: shippingData },
+        authHeaders()
       );
 
       toast.success("Redirecting to payment...");

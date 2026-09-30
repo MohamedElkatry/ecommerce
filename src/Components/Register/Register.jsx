@@ -2,7 +2,7 @@
 import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../../Context/UserContext';
 
@@ -16,10 +16,7 @@ export default function Register() {
   async function register(values) {
     try {
       setLoading(true);
-      let { data } = await axios.post(
-        "https://ecommerce.routemisr.com/api/v1/auth/signup",
-        values
-      );
+      let { data } = await api.post("/auth/signup", values);
 
       localStorage.setItem("userToken", data.token);
       localStorage.setItem('userName', data.user.name);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import Slider from "react-slick";
 import { CartContext } from "../../Context/CartContext";
 import { WishlistContext } from "../../context/WishlistContext";
@@ -24,9 +24,7 @@ export default function ProductDetails() {
   useEffect(() => {
     async function getProduct(productId) {
       try {
-        let { data } = await axios.get(
-          `https://ecommerce.routemisr.com/api/v1/products/${productId}`
-        );
+        let { data } = await api.get(`/products/${productId}`);
         setProduct(data.data);
         setLoading(false);
       } catch (error) {
@@ -76,6 +74,8 @@ export default function ProductDetails() {
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
             <p className="text-white text-lg">Loading product details...</p>
           </div>
+        ) : !product ? (
+          <p className="text-center text-gray-600 text-lg">Product was not found.</p>
         ) : (
           <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg p-6 gap-8">
             {/* Product Image Slider */}

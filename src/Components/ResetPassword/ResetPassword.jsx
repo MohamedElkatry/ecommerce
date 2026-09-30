@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import axios from "axios";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function ResetPassword() {
@@ -10,10 +10,7 @@ export default function ResetPassword() {
 
   async function changePassword(values) {
     try {
-      const { data } = await axios.put(
-        "https://ecommerce.routemisr.com/api/v1/auth/resetPassword",
-        values
-      );
+      const { data } = await api.put("/auth/resetPassword", values);
       if (data.token) {
         navigate("/login");
       }

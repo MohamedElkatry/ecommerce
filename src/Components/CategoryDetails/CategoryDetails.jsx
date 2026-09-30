@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 
 export default function CategoryDetails() {
   const { id } = useParams(); // ✅ Fetch ID from URL
@@ -13,13 +13,11 @@ export default function CategoryDetails() {
     async function fetchCategoryData() {
       try {
         // ✅ Fetch category details
-        const categoryResponse = await axios.get(`https://ecommerce.routemisr.com/api/v1/categories/${id}`);
+        const categoryResponse = await api.get(`/categories/${id}`);
         setCategory(categoryResponse.data.data);
 
         // ✅ Fetch all subcategories for this category
-        const subcategoriesResponse = await axios.get(
-          `https://ecommerce.routemisr.com/api/v1/categories/${id}/subcategories`
-        );
+        const subcategoriesResponse = await api.get(`/categories/${id}/subcategories`);
         setSubcategories(subcategoriesResponse.data.data);
       } catch (error) {
         console.error("Error fetching category data:", error);
@@ -45,7 +43,7 @@ export default function CategoryDetails() {
           </ul>
         </div>
       ) : (
-        <p className="text-blue-500">Loading data...</p>
+        <p className="text-blue-500">No category to show.</p>
       )}
     </div>
   );

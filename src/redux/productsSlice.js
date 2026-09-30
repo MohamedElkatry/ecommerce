@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { build } from "vite";
+import api from "../services/api";
 
 
 let initialState = {isLoading: false, products: [], error: null}
 export let getProducts = createAsyncThunk('productSlice/getProducts' , async()=>{
-    let {data} = await axios.get(`https://ecommerce.routemisr.com/api/v1/products`)
+    let {data} = await api.get("/products")
     return data.data;
 })
 

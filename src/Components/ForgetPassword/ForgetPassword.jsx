@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import axios from "axios";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function ForgetPass() {
@@ -10,10 +10,7 @@ export default function ForgetPass() {
 
   async function sendemail(values) {
     try {
-      const { data } = await axios.post(
-        "https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords",
-        values
-      );
+      const { data } = await api.post("/auth/forgotPasswords", values);
       if (data.statusMsg === "success") {
         navigate("/ResetCode");
       }

@@ -1,22 +1,22 @@
 import React, { useContext, useState, useEffect } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import api from "../../services/api";
+import { Link, useNavigate } from "react-router-dom"; // إضافة useNavigate
 import Loading from "../Loading/Loading";
 import { WishlistContext } from "../../context/WishlistContext";
 import { useQuery } from "@tanstack/react-query";
 import { CartContext } from "../../Context/CartContext";
-import chickSound from "../../../public/sounds/chick.wav"
+import chickSound from "../../../public/sounds/chick.wav";
 
 const playClickSound = () => {
   const sound = new Audio(chickSound);
   sound.play().catch((error) => console.error("Error playing sound:", error));
 };
 
-
 export default function RecentProducts() {
   const { addToWishlist, removeFromWishlist } = useContext(WishlistContext);
   const { addProductToCart } = useContext(CartContext);
   const [liked, setLiked] = useState({});
+  const navigate = useNavigate(); // إنشاء الـ navigate
 
   useEffect(() => {
     const savedWishlist = JSON.parse(localStorage.getItem("wishlist")) || {};
@@ -34,7 +34,7 @@ export default function RecentProducts() {
   }, []);
 
   function getProducts() {
-    return axios.get("https://ecommerce.routemisr.com/api/v1/products");
+    return api.get("/products");
   }
 
   const { data, isLoading } = useQuery({
@@ -43,6 +43,12 @@ export default function RecentProducts() {
   });
 
   const handleLikeClick = (product) => {
+    // إذا لم يكن المستخدم مسجل دخول، يتم توجيههم إلى صفحة الـ login
+    const isAuthenticated = localStorage.getItem("userToken");
+    if (!isAuthenticated) {
+      return navigate("/login"); // التوجيه إلى صفحة الـ login
+    }
+
     playClickSound();
     setLiked((prevState) => {
       const isLiked = !!prevState[product.id];
@@ -58,13 +64,24 @@ export default function RecentProducts() {
     });
   };
 
+  const handleAddToCart = (product) => {
+    const isAuthenticated = localStorage.getItem("userToken");
+    if (!isAuthenticated) {
+      return navigate("/login"); // التوجيه إلى صفحة الـ login
+    }
+    playClickSound();
+    addProductToCart(product.id);
+  };
+
   return (
     <div className="container mx-auto p-6">
       {isLoading ? (
         <Loading />
+      ) : !data?.data?.data?.length ? (
+        <p className="text-center text-gray-600 text-lg">No products to show.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {data?.data.data.map((product) => (
+          {data.data.data.map((product) => (
             <div
               key={product.id}
               className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center transition-transform transform hover:scale-105"
@@ -88,7 +105,7 @@ export default function RecentProducts() {
               </Link>
               <div className="flex items-center justify-between w-full mt-3">
                 <button
-                  onClick={() => { playClickSound(); addProductToCart(product.id); }}
+                  onClick={() => handleAddToCart(product)} // استخدام handleAddToCart
                   className="w-full bg-[#1E3A8A] text-white px-4 py-2 rounded-lg hover:bg-[#12275d] transition"
                 >
                   Add to Cart
@@ -97,7 +114,7 @@ export default function RecentProducts() {
                   className={`fas fa-heart cursor-pointer text-2xl ml-3 transition ${
                     liked[product.id] ? "text-red-500" : "text-gray-500 hover:text-red-500"
                   }`}
-                  onClick={() => handleLikeClick(product)}
+                  onClick={() => handleLikeClick(product)} // استخدام handleLikeClick
                 ></i>
               </div>
             </div>

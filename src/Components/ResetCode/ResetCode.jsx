@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import axios from "axios";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function ResetCode() {
@@ -10,10 +10,7 @@ export default function ResetCode() {
 
   async function sendCode(values) {
     try {
-      const { data } = await axios.post(
-        "https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode",
-        values
-      );
+      const { data } = await api.post("/auth/verifyResetCode", values);
       if (data.status === "Success") {
         navigate("/ResetPassword");
       }

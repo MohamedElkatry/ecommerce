@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import Loading from "../Loading/Loading";
 import chickSound from "../../../public/sounds/chick.wav"
 
@@ -10,9 +10,7 @@ const playClickSound = () => {
 };
 
 const fetchBrands = async () => {
-  const response = await axios.get(
-    "https://ecommerce.routemisr.com/api/v1/brands"
-  );
+  const response = await api.get("/brands");
   return response.data.data;
 };
 

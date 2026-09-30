@@ -1,0 +1,16 @@
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\bin\Debug\net8.0\ECommerce.Application.deps.json
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\bin\Debug\net8.0\ECommerce.Application.dll
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\bin\Debug\net8.0\ECommerce.Application.pdb
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\bin\Debug\net8.0\ECommerce.Domain.dll
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\bin\Debug\net8.0\ECommerce.Domain.pdb
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerce.Application.csproj.AssemblyReference.cache
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerce.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerce.Application.AssemblyInfoInputs.cache
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerce.Application.AssemblyInfo.cs
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerce.Application.csproj.CoreCompileInputs.cache
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerce.Application.sourcelink.json
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerc.670E0CBE.Up2Date
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerce.Application.dll
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\refint\ECommerce.Application.dll
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ECommerce.Application.pdb
+D:\fronend\react\freshcart\backend\src\ECommerce.Application\obj\Debug\net8.0\ref\ECommerce.Application.dll
